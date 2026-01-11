@@ -1,11 +1,12 @@
 // src/components/ProductList.jsx
 import React from 'react';
-
+import { useDispatch } from 'react-redux';               // ← NEW
+import { addItem } from '../redux/CartSlice';            // ← NEW
 import monsteraImg from '../assets/images/monstera.jpg';
 import snakePlantImg from '../assets/images/snake-plant.jpg';
 import fiddleLeafImg from '../assets/images/fiddle-leaf.jpg';
 import pothosImg from '../assets/images/pothos.jpg';
-// Add more imports if you downloaded extra images
+
 
 const plants = [
   {
@@ -43,21 +44,24 @@ const plants = [
 ];
 
 const ProductList = () => {
+  const dispatch = useDispatch();                        // ← NEW: get dispatch function
+
   return (
     <div className="product-list-page">
       <h2>Our Plants Collection</h2>
       <div className="products-grid">
         {plants.map((plant) => (
           <div key={plant.id} className="product-card">
-            <img 
-              src={plant.image} 
-              alt={plant.name} 
-              className="product-image" 
-            />
+            <img src={plant.image} alt={plant.name} className="product-image" />
             <h3>{plant.name}</h3>
             <p className="price">${plant.price.toFixed(2)}</p>
             <p className="description">{plant.description}</p>
-            <button className="add-to-cart">Add to Cart</button>
+            <button
+              className="add-to-cart"
+              onClick={() => dispatch(addItem(plant))}     // ← THIS IS THE MAGIC LINE!
+            >
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
